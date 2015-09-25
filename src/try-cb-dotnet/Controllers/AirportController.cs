@@ -1,6 +1,5 @@
-﻿using System.Web.Http;
-using Couchbase.N1QL;
-using try_cb_dotnet.Storage.Couchbase;
+﻿using System.Collections.Generic;
+using System.Web.Http;
 
 namespace try_cb_dotnet.Controllers
 {
@@ -10,39 +9,21 @@ namespace try_cb_dotnet.Controllers
         [ActionName("findAll")]
         public object FindAll(string search, string token)
         {
-            // [{"airportname":"San Francisco Intl"}]
-            //return new List<dynamic>()
-            //{
-            //    new {airportname = "San Francisco Intl"}
-            //};
-
-            if (search.Length == 3)
+            /// Task:
+            /// This is a Web API call, a method that is called from the static html (index.html).
+            /// The js in the static html expectes this "findAll" web api call to return a
+            /// "airportname" in a json format like this:
+            /// [{"airportname":"San Francisco Intl"}]
+            /// 
+            /// Implement the method to return a list of airport names that match the "search" string
+            /// and return the result list.
+            /// The result list is used by the UI to show a drop-down of matching airport names the user can select from.
+            /// 
+            /// Hint: use N1QL to query the "travel-sample" bucket in Couchbase and return all matching airport names. 
+            return new List<dynamic>()
             {
-                // LAX
-                var query = 
-                    new QueryRequest("SELECT airportname FROM `" + CouchbaseConfigHelper.Instance.Bucket + "` WHERE faa=$1")
-                    .AddPositionalParameter(search.ToUpper());
-
-                return CouchbaseStorageHelper.Instance.ExecuteQuery(query).Rows;
-            }
-            else if (search.Length == 4)
-            {
-                // KLAX
-                var query =
-                    new QueryRequest("SELECT airportname FROM `" + CouchbaseConfigHelper.Instance.Bucket + "` WHERE icao = '$1'")
-                    .AddPositionalParameter(search.ToUpper());
-
-                return CouchbaseStorageHelper.Instance.ExecuteQuery(query).Rows;
-            }
-            else
-            {
-                // Los Angeles
-                var query =
-                    new QueryRequest("SELECT airportname FROM `" + CouchbaseConfigHelper.Instance.Bucket + "` WHERE airportname LIKE $1")
-                    .AddPositionalParameter("%" + search + "%");
-
-                return CouchbaseStorageHelper.Instance.ExecuteQuery(query).Rows;
-            }
+                new {airportname = "San Francisco Intl"}
+            };
         }
     }
 }
