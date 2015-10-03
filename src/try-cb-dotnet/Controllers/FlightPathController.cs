@@ -20,7 +20,7 @@ namespace try_cb_dotnet.Controllers
         {
             string queryFrom = null;
             string queryTo = null;
-            var queryLeave = (int)leave.DayOfWeek + 1;
+            var queryLeave = (int)leave.DayOfWeek;
 
             // raw query
             var query1 =
